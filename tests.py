@@ -29,19 +29,20 @@ class AggregateHurricaneDataTest(unittest.TestCase):
 
     def test_should_aggregate_single_record_by_names(self):
         expected = {
-         "A": {
-            "Name": "A",
-            "Month": "A",
-            "Year": 1,
-            "Max Sustained Wind": 1,
-            "Areas Affected": ["area"],
-            "Damage": "Damages not recorded",
-            "Deaths": 1
+            "A": {
+                "Name": "A",
+                "Month": "A",
+                "Year": 1,
+                "Max Sustained Wind": 1,
+                "Areas Affected": ["area"],
+                "Damage": "Damages not recorded",
+                "Deaths": 1
             }
         }
-        self.assertEqual(analyzer.aggregated_hurricane_records('names', names=["A"], months=["A"], years=[1],
+        actual = analyzer.aggregated_hurricane_records_by_name(names=["A"], months=["A"], years=[1],
                                                                max_sustained_winds=[1], areas_affected=[["area"]],
-                                                               damages=["Damages not recorded"], deaths=[1]), expected)
+                                                               damages=["Damages not recorded"], deaths=[1])
+        self.assertEqual(actual, expected)
 
     def test_should_aggregate_many_records_by_names(self):
         expected = {
@@ -64,10 +65,11 @@ class AggregateHurricaneDataTest(unittest.TestCase):
                 "Deaths": 2
             }
         }
-        self.assertEqual(
-            analyzer.aggregated_hurricane_records('names', names=["A", "B"], months=["A", "B"], years=[1, 2],
-                                                  max_sustained_winds=[1, 2], areas_affected=[["area"], ["A", "B"]],
-                                                  damages=["Damages not recorded", "0.5M"], deaths=[1, 2]), expected)
+        actual = analyzer.aggregated_hurricane_records_by_name(names=["A", "B"], months=["A", "B"], years=[1, 2],
+                                                               max_sustained_winds=[1, 2],
+                                                               areas_affected=[["area"], ["A", "B"]],
+                                                               damages=["Damages not recorded", "0.5M"], deaths=[1, 2])
+        self.assertEqual(actual, expected)
 
     def test_should_aggregate_single_record_by_year(self):
         expected = {
@@ -83,9 +85,10 @@ class AggregateHurricaneDataTest(unittest.TestCase):
                 }
             ]
         }
-        self.assertEqual(analyzer.aggregated_hurricane_records('years', names=["A"], months=["A"], years=[1],
+        actual = analyzer.aggregated_hurricane_records_by_year(names=["A"], months=["A"], years=[1],
                                                                max_sustained_winds=[1], areas_affected=[["area"]],
-                                                               damages=["Damages not recorded"], deaths=[1]), expected)
+                                                               damages=["Damages not recorded"], deaths=[1])
+        self.assertEqual(actual, expected)
 
     def test_should_aggregate_many_records_by_year(self):
         expected = {
@@ -110,10 +113,11 @@ class AggregateHurricaneDataTest(unittest.TestCase):
                 }
             ]
         }
-        self.assertEqual(
-            analyzer.aggregated_hurricane_records('years', names=["A", "B"], months=["A", "B"], years=[1, 1],
-                                                  max_sustained_winds=[1, 2], areas_affected=[["area"], ["A", "B"]],
-                                                  damages=["Damages not recorded", "0.5M"], deaths=[1, 2]), expected)
+        actual = analyzer.aggregated_hurricane_records_by_year(names=["A", "B"], months=["A", "B"], years=[1, 1],
+                                                               max_sustained_winds=[1, 2],
+                                                               areas_affected=[["area"], ["A", "B"]],
+                                                               damages=["Damages not recorded", "0.5M"], deaths=[1, 2])
+        self.assertEqual(actual, expected)
 
 
 if __name__ == '__main__':
