@@ -1,6 +1,10 @@
 def updated_damages(damages):
-    if '100M' in damages:
-        return [100000000]
-    if '10M' in damages:
-        return [10000000]
-    return list(damages)
+    return list(map(_converted_value, damages))
+
+
+def _converted_value(value):
+    suffix = 'M'
+    factor = 1000000
+    if value.endswith(suffix):
+        return float(value.replace(suffix, "")) * factor
+    return value
