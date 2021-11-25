@@ -25,5 +25,28 @@ class UpdatesDamagesTest(unittest.TestCase):
         self.assertEqual(analyzer.updated_damages(['0.5M', 'Damages not recorded', '0.5B']), expected)
 
 
+class AggregateHurricaneDataTest(unittest.TestCase):
+
+    def test_should_aggregate_single_record(self):
+        expected = [{
+            "Name": "A",
+            "Month": "A",
+            "Year": 1,
+            "Max Sustained Wind": 1,
+            "Areas Affected": ["area"],
+            "Damage": "Damages not recorded",
+            "Deaths": 1
+        }]
+        self.assertEqual(analyzer.aggregated_records(
+            names=["A"],
+            months=["A"],
+            years=[1],
+            max_sustained_winds=[1],
+            areas_affected=[["area"]],
+            damages=["Damages not recorded"],
+            deaths=[1]
+        ), expected)
+
+
 if __name__ == '__main__':
     unittest.main()
