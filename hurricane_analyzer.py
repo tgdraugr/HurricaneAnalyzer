@@ -1,2 +1,2 @@
-def works():
-    return True
+def updated_damages(damages):
+    return list(damages)
