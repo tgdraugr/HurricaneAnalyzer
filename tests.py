@@ -28,7 +28,8 @@ class UpdatesDamagesTest(unittest.TestCase):
 class AggregateHurricaneDataTest(unittest.TestCase):
 
     def test_should_aggregate_single_record(self):
-        expected = [{
+        expected = {
+         "A": {
             "Name": "A",
             "Month": "A",
             "Year": 1,
@@ -36,7 +37,8 @@ class AggregateHurricaneDataTest(unittest.TestCase):
             "Areas Affected": ["area"],
             "Damage": "Damages not recorded",
             "Deaths": 1
-        }]
+            }
+        }
         self.assertEqual(analyzer.aggregated_hurricane_records(
             names=["A"],
             months=["A"],
@@ -48,8 +50,8 @@ class AggregateHurricaneDataTest(unittest.TestCase):
         ), expected)
 
     def test_should_aggregate_many_records(self):
-        expected = [
-            {
+        expected = {
+            "A": {
                 "Name": "A",
                 "Month": "A",
                 "Year": 1,
@@ -58,7 +60,7 @@ class AggregateHurricaneDataTest(unittest.TestCase):
                 "Damage": "Damages not recorded",
                 "Deaths": 1
             },
-            {
+            "B": {
                 "Name": "B",
                 "Month": "B",
                 "Year": 2,
@@ -67,7 +69,7 @@ class AggregateHurricaneDataTest(unittest.TestCase):
                 "Damage": 500000,
                 "Deaths": 2
             }
-        ]
+        }
         self.assertEqual(analyzer.aggregated_hurricane_records(
             names=["A", "B"],
             months=["A", "B"],
@@ -77,42 +79,6 @@ class AggregateHurricaneDataTest(unittest.TestCase):
             damages=["Damages not recorded", "0.5M"],
             deaths=[1, 2]
         ), expected)
-
-    def test_should_aggregate_even_when_records_are_missing(self):
-        expected = [
-            {
-                "Name": "A",
-                "Month": "",
-                "Year": "",
-                "Max Sustained Wind": "",
-                "Areas Affected": [],
-                "Damage": "",
-                "Deaths": ""
-            }
-        ]
-        self.assertEqual(analyzer.aggregated_hurricane_records(
-            names=["A"],
-            months=[],
-            years=[],
-            max_sustained_winds=[],
-            areas_affected=[],
-            damages=[],
-            deaths=[]
-        ), expected)
-
-    def test_should_aggregate_even_when_records_are_not_indicated(self):
-        expected = [
-            {
-                "Name": "A",
-                "Month": "",
-                "Year": "",
-                "Max Sustained Wind": "",
-                "Areas Affected": [],
-                "Damage": "",
-                "Deaths": ""
-            }
-        ]
-        self.assertEqual(analyzer.aggregated_hurricane_records(names=["A"]), expected)
 
 
 if __name__ == '__main__':
