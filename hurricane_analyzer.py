@@ -2,29 +2,12 @@ def updated_damages(damages):
     return list(map(_updated_damage, damages))
 
 
-def aggregated_records(**kwargs):
-    return [_single_node(kwargs, 0)]
-
-
-def _single_node(kwargs, hurricane_index):
-    keys_per_arg = {
-        'names': 'Name',
-        'months': 'Month',
-        'years': 'Year',
-        'max_sustained_winds': 'Max Sustained Wind',
-        'areas_affected': 'Areas Affected',
-        'damages': 'Damage',
-        'deaths': 'Deaths'
-    }
-    return {
-        keys_per_arg.get('names'): kwargs.get('names')[hurricane_index],
-        keys_per_arg.get('months'): kwargs.get('months')[hurricane_index],
-        keys_per_arg.get('years'): kwargs.get('years')[hurricane_index],
-        keys_per_arg.get('max_sustained_winds'): kwargs.get('max_sustained_winds')[hurricane_index],
-        keys_per_arg.get('areas_affected'): kwargs.get('areas_affected')[hurricane_index],
-        keys_per_arg.get('damages'): kwargs.get('damages')[hurricane_index],
-        keys_per_arg.get('deaths'): kwargs.get('deaths')[hurricane_index]
-    }
+def aggregated_hurricane_records(**kwargs):
+    total_records = len(kwargs.get('names'))
+    result = []
+    for hurricane_id in range(total_records):
+        result.append(_single_hurricane_record(hurricane_id, kwargs))
+    return result
 
 
 def _updated_damage(damage):
@@ -35,3 +18,19 @@ def _updated_damage(damage):
         damage_value = damage.replace(suffix, "")
         return float(damage_value) * factor
     return damage
+
+
+def _single_hurricane_record(hurricane_id, kwargs):
+    return {
+        'Name': _valueOf('names', hurricane_id, kwargs),
+        'Month': _valueOf('months', hurricane_id, kwargs),
+        'Year': _valueOf('years', hurricane_id, kwargs),
+        'Max Sustained Wind': _valueOf('max_sustained_winds', hurricane_id, kwargs),
+        'Areas Affected': _valueOf('areas_affected', hurricane_id, kwargs),
+        'Damage': _updated_damage(_valueOf('damages', hurricane_id, kwargs)),
+        'Deaths': _valueOf('deaths', hurricane_id, kwargs)
+    }
+
+
+def _valueOf(key, hurricane_id, kwargs):
+    return kwargs.get(key)[hurricane_id]

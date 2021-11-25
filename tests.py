@@ -37,7 +37,7 @@ class AggregateHurricaneDataTest(unittest.TestCase):
             "Damage": "Damages not recorded",
             "Deaths": 1
         }]
-        self.assertEqual(analyzer.aggregated_records(
+        self.assertEqual(analyzer.aggregated_hurricane_records(
             names=["A"],
             months=["A"],
             years=[1],
@@ -45,6 +45,37 @@ class AggregateHurricaneDataTest(unittest.TestCase):
             areas_affected=[["area"]],
             damages=["Damages not recorded"],
             deaths=[1]
+        ), expected)
+
+    def test_should_aggregate_many_records(self):
+        expected = [
+            {
+                "Name": "A",
+                "Month": "A",
+                "Year": 1,
+                "Max Sustained Wind": 1,
+                "Areas Affected": ["area"],
+                "Damage": "Damages not recorded",
+                "Deaths": 1
+            },
+            {
+                "Name": "B",
+                "Month": "B",
+                "Year": 2,
+                "Max Sustained Wind": 2,
+                "Areas Affected": ["A", "B"],
+                "Damage": 500000,
+                "Deaths": 2
+            }
+        ]
+        self.assertEqual(analyzer.aggregated_hurricane_records(
+            names=["A", "B"],
+            months=["A", "B"],
+            years=[1, 2],
+            max_sustained_winds=[1, 2],
+            areas_affected=[["area"], ["A", "B"]],
+            damages=["Damages not recorded", "0.5M"],
+            deaths=[1, 2]
         ), expected)
 
 
