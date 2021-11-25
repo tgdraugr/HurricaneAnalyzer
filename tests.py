@@ -20,6 +20,10 @@ class UpdatesDamagesTest(unittest.TestCase):
         self.assertEqual(analyzer.updated_damages(['100B']), [100000000000.0])
         self.assertEqual(analyzer.updated_damages(['1B', '10B']), [1000000000.0, 10000000000.0])
 
+    def test_should_correctly_update_damage(self):
+        expected = [500000, 'Damages not recorded', 500000000]
+        self.assertEqual(analyzer.updated_damages(['0.5M', 'Damages not recorded', '0.5B']), expected)
+
 
 if __name__ == '__main__':
     unittest.main()
