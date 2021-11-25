@@ -2,9 +2,27 @@ def updated_damages(damages):
     return list(map(_updated_damage, damages))
 
 
-def aggregated_hurricane_records(aggregation_key='names', **kwargs):
+def aggregated_hurricane_records(aggregation_key, **kwargs):
+    if aggregation_key == 'names':
+        return _aggregated_hurricane_records_by_name(kwargs)
+    if aggregation_key == 'years':
+        return _aggregated_hurricane_records_by_year(kwargs)
+    return None
+
+
+def _aggregated_hurricane_records_by_year(kwargs):
     result = {}
-    for hurricane_id, context in enumerate(kwargs.get(aggregation_key)):
+    for context in kwargs.get("years"):
+        result[context] = []
+    for hurricane_id, context in enumerate(kwargs.get("years")):
+        record = _single_hurricane_record(hurricane_id, kwargs)
+        result[context].append(record)
+    return result
+
+
+def _aggregated_hurricane_records_by_name(kwargs):
+    result = {}
+    for hurricane_id, context in enumerate(kwargs.get("names")):
         result[context] = _single_hurricane_record(hurricane_id, kwargs)
     return result
 
