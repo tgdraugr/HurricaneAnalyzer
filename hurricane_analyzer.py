@@ -3,11 +3,9 @@ def updated_damages(damages):
 
 
 def aggregated_hurricane_records(aggregation_key='names', **kwargs):
-    total_records = len(kwargs.get(aggregation_key))
     result = {}
-    for hurricane_id in range(total_records):
-        record = _single_hurricane_record(hurricane_id, kwargs)
-        result[_value_of(aggregation_key, hurricane_id, kwargs)] = record
+    for hurricane_id, context in enumerate(kwargs.get(aggregation_key)):
+        result[context] = _single_hurricane_record(hurricane_id, kwargs)
     return result
 
 
@@ -23,15 +21,11 @@ def _updated_damage(damage):
 
 def _single_hurricane_record(hurricane_id, kwargs):
     return {
-        'Name': _value_of('names', hurricane_id, kwargs),
-        'Month': _value_of('months', hurricane_id, kwargs),
-        'Year': _value_of('years', hurricane_id, kwargs),
-        'Max Sustained Wind': _value_of('max_sustained_winds', hurricane_id, kwargs),
-        'Areas Affected': _value_of('areas_affected', hurricane_id, kwargs),
-        'Damage': _updated_damage(_value_of('damages', hurricane_id, kwargs)),
-        'Deaths': _value_of('deaths', hurricane_id, kwargs)
+        'Name': kwargs.get('names')[hurricane_id],
+        'Month': kwargs.get('months')[hurricane_id],
+        'Year': kwargs.get('years')[hurricane_id],
+        'Max Sustained Wind': kwargs.get('max_sustained_winds')[hurricane_id],
+        'Areas Affected': kwargs.get('areas_affected')[hurricane_id],
+        'Damage': _updated_damage(kwargs.get('damages')[hurricane_id]),
+        'Deaths': kwargs.get('deaths')[hurricane_id]
     }
-
-
-def _value_of(key, hurricane_id, kwargs):
-    return kwargs.get(key)[hurricane_id]
