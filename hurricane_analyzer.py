@@ -3,11 +3,19 @@ def updated_damages(damages):
 
 
 def aggregated_hurricane_records(**kwargs):
-    total_records = len(kwargs.get('names'))
     result = []
-    for hurricane_id in range(total_records):
+    for hurricane_id in range(_max_total_records(kwargs)):
         result.append(_single_hurricane_record(hurricane_id, kwargs))
     return result
+
+
+def _max_total_records(kwargs):
+    total = 0
+    for values in kwargs.values():
+        current = len(values)
+        if current > total:
+            total = current
+    return total
 
 
 def _updated_damage(damage):
@@ -40,6 +48,3 @@ def _value_of(key, hurricane_id, kwargs, value_if_empty):
     if key in kwargs and _contains_values():
         return kwargs.get(key)[hurricane_id]
     return value_if_empty
-
-
-
