@@ -209,5 +209,70 @@ class AggregateHurricaneDataTest(unittest.TestCase):
         self.assertEqual(analyzer.aggregated_hurricane_records_by_year(hurricanes_by_name), expected)
 
 
+class AffectedAreasTest(unittest.TestCase):
+
+    def test_should_count_single_affected_area(self):
+        hurricanes_by_name = {
+            "A": {
+                "Name": "A",
+                "Month": "A",
+                "Year": 1,
+                "Max Sustained Wind": 1,
+                "Areas Affected": ["Test1"],
+                "Damage": "Damages not recorded",
+                "Deaths": 1
+            }
+        }
+        expected = {
+            "Test1": 1
+        }
+        self.assertEqual(analyzer.total_areas_affected(hurricanes_by_name), expected)
+
+    def test_should_count_multiple_affected_areas_for_unique_hurricane_name(self):
+        hurricanes_by_name = {
+            "A": {
+                "Name": "A",
+                "Month": "A",
+                "Year": 1,
+                "Max Sustained Wind": 1,
+                "Areas Affected": ["Test1", "Test2"],
+                "Damage": "Damages not recorded",
+                "Deaths": 1
+            }
+        }
+        expected = {
+            "Test1": 1,
+            "Test2": 1
+        }
+        self.assertEqual(analyzer.total_areas_affected(hurricanes_by_name), expected)
+
+    def test_should_count_multiple_affected_areas_for_multiple_hurricane_names(self):
+        hurricanes_by_name = {
+            "A": {
+                "Name": "A",
+                "Month": "A",
+                "Year": 1,
+                "Max Sustained Wind": 1,
+                "Areas Affected": ["Test1", "Test2"],
+                "Damage": "Damages not recorded",
+                "Deaths": 1
+            },
+            "B": {
+                "Name": "B",
+                "Month": "B",
+                "Year": 1,
+                "Max Sustained Wind": 1,
+                "Areas Affected": ["Test1"],
+                "Damage": "Damages not recorded",
+                "Deaths": 1
+            }
+        }
+        expected = {
+            "Test1": 2,
+            "Test2": 1
+        }
+        self.assertEqual(analyzer.total_areas_affected(hurricanes_by_name), expected)
+
+
 if __name__ == '__main__':
     unittest.main()

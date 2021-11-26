@@ -10,18 +10,18 @@ def aggregated_hurricane_records_by_name(**kwargs):
 
 
 def aggregated_hurricane_records_by_year(hurricanes_by_name):
-    hurricanes = hurricanes_by_name.values()
-    records_by_year = {}
-    for hurricane in hurricanes:
-        _add_hurricane("Year", hurricane, records_by_year)
+    years = list(map(lambda h: h["Year"], hurricanes_by_name.values()))
+    records_by_year = dict((year, []) for year in years)
+    for hurricane in hurricanes_by_name.values():
+        records_by_year[hurricane["Year"]].append(hurricane)
     return records_by_year
 
 
-def _add_hurricane(field, hurricane, records_by_year):
-    key = hurricane[field]
-    if key not in records_by_year:
-        records_by_year[key] = []
-    records_by_year[key].append(hurricane)
+def total_areas_affected(hurricanes_by_name):
+    areas_per_hurricane = \
+        list(map(lambda h: h["Areas Affected"], hurricanes_by_name.values()))
+    areas = sum(areas_per_hurricane, [])
+    return dict((area, areas.count(area)) for area in areas)
 
 
 def _updated_damage(damage):
