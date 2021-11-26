@@ -1,5 +1,5 @@
 def updated_damages(damages):
-    return list(map(_updated_damage, damages))
+    return _transformed(damages, _updated_damage)
 
 
 def aggregated_hurricane_records_by_name(**kwargs):
@@ -19,7 +19,7 @@ def aggregated_hurricane_records_by_name(**kwargs):
 
 
 def aggregated_hurricane_records_by_year(hurricanes_by_name):
-    years = list(map(lambda h: h["Year"], hurricanes_by_name.values()))
+    years = _transformed(hurricanes_by_name.values(), lambda h: h["Year"])
     records_by_year = dict((year, []) for year in years)
     for hurricane in hurricanes_by_name.values():
         records_by_year[hurricane["Year"]].append(hurricane)
@@ -27,23 +27,17 @@ def aggregated_hurricane_records_by_year(hurricanes_by_name):
 
 
 def total_areas_affected(hurricanes_by_name):
-    areas_per_hurricane = \
-        list(map(lambda h: h["Areas Affected"], hurricanes_by_name.values()))
-    areas = sum(areas_per_hurricane, [])
+    areas = sum(_transformed(hurricanes_by_name.values(), lambda h: h["Areas Affected"]), [])
     return dict((area, areas.count(area)) for area in areas)
 
 
 def most_affected_area(affected_areas):
-    count_field = 1
-    descending_areas =\
-        sorted(list(iter(affected_areas.items())),
-               key=lambda a: a[count_field], reverse=True)
-    return descending_areas[0]
+    return _top_most_of(affected_areas)
 
 
 def most_deadly_hurricane(hurricanes_by_name):
-    hurricane = hurricanes_by_name["A"]
-    return hurricane["Name"], hurricane["Deaths"]
+    deaths_by_hurricane = dict(_transformed(hurricanes_by_name.values(), lambda h: (h["Name"], h["Deaths"])))
+    return _top_most_of(deaths_by_hurricane)
 
 
 def _updated_damage(damage):
@@ -56,3 +50,12 @@ def _updated_damage(damage):
     return damage
 
 
+def _top_most_of(tuples, count_field=1):
+    descending_values = \
+        sorted(list(iter(tuples.items())),
+               key=lambda a: a[count_field], reverse=True)
+    return descending_values[0]
+
+
+def _transformed(iterable, mapper):
+    return list(map(mapper, iterable))

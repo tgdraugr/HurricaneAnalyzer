@@ -317,6 +317,20 @@ class GreatestNumberOfDeathsTest(unittest.TestCase):
                 "Deaths": 2
             },
             "B": {
+                "Name": "B",
+                "Month": "B",
+                "Year": 1,
+                "Max Sustained Wind": 1,
+                "Areas Affected": ["Test1"],
+                "Damage": "Damages not recorded",
+                "Deaths": 1
+            }
+        }
+        self.assertEqual(analyzer.most_deadly_hurricane(hurricanes_by_name), ("A", 2))
+
+    def test_should_find_hurricane_with_greatest_deaths_when_there_are_several_hurricanes_unordered_by_death(self):
+        hurricanes_by_name = {
+            "A": {
                 "Name": "A",
                 "Month": "A",
                 "Year": 1,
@@ -324,9 +338,27 @@ class GreatestNumberOfDeathsTest(unittest.TestCase):
                 "Areas Affected": ["Test1", "Test2"],
                 "Damage": "Damages not recorded",
                 "Deaths": 1
+            },
+            "B": {
+                "Name": "B",
+                "Month": "B",
+                "Year": 1,
+                "Max Sustained Wind": 1,
+                "Areas Affected": ["Test1"],
+                "Damage": "Damages not recorded",
+                "Deaths": 10
+            },
+            "C": {
+                "Name": "C",
+                "Month": "C",
+                "Year": 1,
+                "Max Sustained Wind": 1,
+                "Areas Affected": ["Test1"],
+                "Damage": "Damages not recorded",
+                "Deaths": 2
             }
         }
-        self.assertEqual(analyzer.most_deadly_hurricane(hurricanes_by_name), ("A", 2))
+        self.assertEqual(analyzer.most_deadly_hurricane(hurricanes_by_name), ("B", 10))
 
 
 if __name__ == '__main__':
