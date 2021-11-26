@@ -274,5 +274,12 @@ class AffectedAreasTest(unittest.TestCase):
         self.assertEqual(analyzer.total_areas_affected(hurricanes_by_name), expected)
 
 
+class AffectedAreasByMostHurricanesTest(unittest.TestCase):
+
+    def test_should_find_most_affected_area_by_hurricanes_when_there_is_only_a_single_affected_area(self):
+        affected_areas = {"Test1": 1}
+        self.assertEqual(analyzer.most_affected_area(affected_areas), ("Test1", 1))
+
+
 if __name__ == '__main__':
     unittest.main()

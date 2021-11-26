@@ -32,6 +32,10 @@ def total_areas_affected(hurricanes_by_name):
     return dict((area, areas.count(area)) for area in areas)
 
 
+def most_affected_area(affected_areas):
+    return next(iter(affected_areas.items()))
+
+
 def _updated_damage(damage):
     factors_per_suffix = {'B': 1000000000, 'M': 1000000}
     suffix = damage[-1]
