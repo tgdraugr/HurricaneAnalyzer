@@ -280,6 +280,14 @@ class AffectedAreasByMostHurricanesTest(unittest.TestCase):
         affected_areas = {"Test1": 1}
         self.assertEqual(analyzer.most_affected_area(affected_areas), ("Test1", 1))
 
+    def test_should_find_most_affected_area_by_hurricanes_when_there_are_several_affected_areas_ordered(self):
+        affected_areas = {"Test1": 10, "Test2": 9, "Test3": 1}
+        self.assertEqual(analyzer.most_affected_area(affected_areas), ("Test1", 10))
+
+    def test_should_find_most_affected_area_by_hurricanes_when_there_are_several_affected_areas_unordered(self):
+        affected_areas = {"Test1": 1, "Test2": 10, "Test3": 9}
+        self.assertEqual(analyzer.most_affected_area(affected_areas), ("Test2", 10))
+
 
 if __name__ == '__main__':
     unittest.main()

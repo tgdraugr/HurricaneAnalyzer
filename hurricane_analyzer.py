@@ -13,6 +13,7 @@ def aggregated_hurricane_records_by_name(**kwargs):
             'Damage': _updated_damage(kwargs.get('damages')[hurricane_index]),
             'Deaths': kwargs.get('deaths')[hurricane_index]
         }
+
     return dict((hurricane_name, _new_hurricane(hurricane_id))
                 for hurricane_id, hurricane_name in enumerate(kwargs.get("names")))
 
@@ -33,7 +34,11 @@ def total_areas_affected(hurricanes_by_name):
 
 
 def most_affected_area(affected_areas):
-    return next(iter(affected_areas.items()))
+    count_field = 1
+    descending_areas =\
+        sorted(list(iter(affected_areas.items())),
+               key=lambda a: a[count_field], reverse=True)
+    return descending_areas[0]
 
 
 def _updated_damage(damage):
