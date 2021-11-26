@@ -98,7 +98,7 @@ class AggregateHurricaneDataTest(unittest.TestCase):
         }
         self.assertEqual(analyzer.aggregated_hurricane_records_by_year(hurricanes_by_name), expected)
 
-    def test_should_aggregate_many_records_by_year(self):
+    def test_should_aggregate_many_records_by_year_on_single_year(self):
         hurricanes_by_name = {
             "A": {
                 "Name": "A",
@@ -136,6 +136,71 @@ class AggregateHurricaneDataTest(unittest.TestCase):
                     "Year": 1,
                     "Max Sustained Wind": 2,
                     "Areas Affected": ["A", "B"],
+                    "Damage": 500000,
+                    "Deaths": 2
+                }
+            ]
+        }
+        self.assertEqual(analyzer.aggregated_hurricane_records_by_year(hurricanes_by_name), expected)
+
+    def test_should_aggregate_many_records_by_year_on_multiple_years(self):
+        hurricanes_by_name = {
+            "A": {
+                "Name": "A",
+                "Month": "A",
+                "Year": 1,
+                "Max Sustained Wind": 1,
+                "Areas Affected": ["area"],
+                "Damage": "Damages not recorded",
+                "Deaths": 1
+            },
+            "B": {
+                "Name": "B",
+                "Month": "B",
+                "Year": 1,
+                "Max Sustained Wind": 2,
+                "Areas Affected": ["A", "B"],
+                "Damage": 500000,
+                "Deaths": 2
+            },
+            "C": {
+                "Name": "C",
+                "Month": "C",
+                "Year": 2,
+                "Max Sustained Wind": 2,
+                "Areas Affected": ["C"],
+                "Damage": 500000,
+                "Deaths": 2
+            },
+        }
+        expected = {
+            1: [
+                {
+                    "Name": "A",
+                    "Month": "A",
+                    "Year": 1,
+                    "Max Sustained Wind": 1,
+                    "Areas Affected": ["area"],
+                    "Damage": "Damages not recorded",
+                    "Deaths": 1
+                },
+                {
+                    "Name": "B",
+                    "Month": "B",
+                    "Year": 1,
+                    "Max Sustained Wind": 2,
+                    "Areas Affected": ["A", "B"],
+                    "Damage": 500000,
+                    "Deaths": 2
+                }
+            ],
+            2: [
+                {
+                    "Name": "C",
+                    "Month": "C",
+                    "Year": 2,
+                    "Max Sustained Wind": 2,
+                    "Areas Affected": ["C"],
                     "Damage": 500000,
                     "Deaths": 2
                 }
