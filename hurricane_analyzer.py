@@ -3,10 +3,18 @@ def updated_damages(damages):
 
 
 def aggregated_hurricane_records_by_name(**kwargs):
-    result = {}
-    for hurricane_id, context in enumerate(kwargs.get("names")):
-        result[context] = _single_hurricane_record(hurricane_id, kwargs)
-    return result
+    def _new_hurricane(hurricane_index):
+        return {
+            'Name': kwargs.get('names')[hurricane_index],
+            'Month': kwargs.get('months')[hurricane_index],
+            'Year': kwargs.get('years')[hurricane_index],
+            'Max Sustained Wind': kwargs.get('max_sustained_winds')[hurricane_index],
+            'Areas Affected': kwargs.get('areas_affected')[hurricane_index],
+            'Damage': _updated_damage(kwargs.get('damages')[hurricane_index]),
+            'Deaths': kwargs.get('deaths')[hurricane_index]
+        }
+    return dict((hurricane_name, _new_hurricane(hurricane_id))
+                for hurricane_id, hurricane_name in enumerate(kwargs.get("names")))
 
 
 def aggregated_hurricane_records_by_year(hurricanes_by_name):
@@ -32,15 +40,3 @@ def _updated_damage(damage):
         damage_value = damage.replace(suffix, "")
         return float(damage_value) * factor
     return damage
-
-
-def _single_hurricane_record(hurricane_id, kwargs):
-    return {
-        'Name': kwargs.get('names')[hurricane_id],
-        'Month': kwargs.get('months')[hurricane_id],
-        'Year': kwargs.get('years')[hurricane_id],
-        'Max Sustained Wind': kwargs.get('max_sustained_winds')[hurricane_id],
-        'Areas Affected': kwargs.get('areas_affected')[hurricane_id],
-        'Damage': _updated_damage(kwargs.get('damages')[hurricane_id]),
-        'Deaths': kwargs.get('deaths')[hurricane_id]
-    }
