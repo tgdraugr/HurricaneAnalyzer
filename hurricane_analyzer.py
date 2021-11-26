@@ -41,6 +41,11 @@ def most_affected_area(affected_areas):
     return descending_areas[0]
 
 
+def most_deadly_hurricane(hurricanes_by_name):
+    hurricane = hurricanes_by_name["A"]
+    return hurricane["Name"], hurricane["Deaths"]
+
+
 def _updated_damage(damage):
     factors_per_suffix = {'B': 1000000000, 'M': 1000000}
     suffix = damage[-1]
@@ -49,3 +54,5 @@ def _updated_damage(damage):
         damage_value = damage.replace(suffix, "")
         return float(damage_value) * factor
     return damage
+
+
