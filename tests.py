@@ -72,6 +72,17 @@ class AggregateHurricaneDataTest(unittest.TestCase):
         self.assertEqual(actual, expected)
 
     def test_should_aggregate_single_record_by_year(self):
+        hurricanes_by_name = {
+            "A": {
+                "Name": "A",
+                "Month": "A",
+                "Year": 1,
+                "Max Sustained Wind": 1,
+                "Areas Affected": ["area"],
+                "Damage": "Damages not recorded",
+                "Deaths": 1
+            }
+        }
         expected = {
             1: [
                 {
@@ -85,12 +96,29 @@ class AggregateHurricaneDataTest(unittest.TestCase):
                 }
             ]
         }
-        actual = analyzer.aggregated_hurricane_records_by_year(names=["A"], months=["A"], years=[1],
-                                                               max_sustained_winds=[1], areas_affected=[["area"]],
-                                                               damages=["Damages not recorded"], deaths=[1])
-        self.assertEqual(actual, expected)
+        self.assertEqual(analyzer.aggregated_hurricane_records_by_year(hurricanes_by_name), expected)
 
     def test_should_aggregate_many_records_by_year(self):
+        hurricanes_by_name = {
+            "A": {
+                "Name": "A",
+                "Month": "A",
+                "Year": 1,
+                "Max Sustained Wind": 1,
+                "Areas Affected": ["area"],
+                "Damage": "Damages not recorded",
+                "Deaths": 1
+            },
+            "B": {
+                "Name": "B",
+                "Month": "B",
+                "Year": 1,
+                "Max Sustained Wind": 2,
+                "Areas Affected": ["A", "B"],
+                "Damage": 500000,
+                "Deaths": 2
+            }
+        }
         expected = {
             1: [
                 {
@@ -113,11 +141,7 @@ class AggregateHurricaneDataTest(unittest.TestCase):
                 }
             ]
         }
-        actual = analyzer.aggregated_hurricane_records_by_year(names=["A", "B"], months=["A", "B"], years=[1, 1],
-                                                               max_sustained_winds=[1, 2],
-                                                               areas_affected=[["area"], ["A", "B"]],
-                                                               damages=["Damages not recorded", "0.5M"], deaths=[1, 2])
-        self.assertEqual(actual, expected)
+        self.assertEqual(analyzer.aggregated_hurricane_records_by_year(hurricanes_by_name), expected)
 
 
 if __name__ == '__main__':
