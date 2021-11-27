@@ -1,5 +1,15 @@
+"""
+    Hurricane Analyzer.
+"""
+
+_FACTORS_BY_SUFFIX = {
+    'B': 1000000000,
+    'M': 1000000
+}
+
+
 def updated_damages(damages):
-    return _transformed(damages, _updated_damage)
+    return _transformed(damages, mapper=_updated_damage)
 
 
 def aggregated_hurricane_records_by_name(**kwargs):
@@ -20,10 +30,10 @@ def aggregated_hurricane_records_by_name(**kwargs):
 
 def aggregated_hurricane_records_by_year(hurricanes_by_name):
     years = _transformed(hurricanes_by_name.values(), lambda h: h["Year"])
-    records_by_year = dict((year, []) for year in years)
+    hurricanes_by_year = dict((year, []) for year in years)
     for hurricane in hurricanes_by_name.values():
-        records_by_year[hurricane["Year"]].append(hurricane)
-    return records_by_year
+        hurricanes_by_year[hurricane["Year"]].append(hurricane)
+    return hurricanes_by_year
 
 
 def total_areas_affected(hurricanes_by_name):
@@ -41,10 +51,9 @@ def most_deadly_hurricane(hurricanes_by_name):
 
 
 def _updated_damage(damage):
-    factors_per_suffix = {'B': 1000000000, 'M': 1000000}
     suffix = damage[-1]
-    if suffix in factors_per_suffix:
-        factor = factors_per_suffix.get(suffix)
+    if suffix in _FACTORS_BY_SUFFIX:
+        factor = _FACTORS_BY_SUFFIX.get(suffix)
         damage_value = damage.replace(suffix, "")
         return float(damage_value) * factor
     return damage

@@ -1,5 +1,5 @@
 import unittest
-import hurricane_analyzer as analyzer
+import analyzer as analyzer
 
 
 class DamageUpdateTest(unittest.TestCase):
