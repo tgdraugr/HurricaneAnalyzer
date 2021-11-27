@@ -2,8 +2,7 @@ import unittest
 import hurricane_analyzer as analyzer
 
 
-class UpdatesDamagesTest(unittest.TestCase):
-
+class DamageUpdateTest(unittest.TestCase):
     def test_should_provide_intact_damages_when_it_has_no_damages_recorded(self):
         fake_damages = ['Damages not recorded']
         self.assertEqual(analyzer.updated_damages(fake_damages), fake_damages)
@@ -25,9 +24,9 @@ class UpdatesDamagesTest(unittest.TestCase):
         self.assertEqual(analyzer.updated_damages(['0.5M', 'Damages not recorded', '0.5B']), expected)
 
 
-class AggregateHurricaneDataTest(unittest.TestCase):
+class HurricaneAggregationByNameTest(unittest.TestCase):
 
-    def test_should_aggregate_single_record_by_names(self):
+    def test_should_aggregate_single_record(self):
         expected = {
             "A": {
                 "Name": "A",
@@ -44,7 +43,7 @@ class AggregateHurricaneDataTest(unittest.TestCase):
                                                                damages=["Damages not recorded"], deaths=[1])
         self.assertEqual(actual, expected)
 
-    def test_should_aggregate_many_records_by_names(self):
+    def test_should_aggregate_many_records(self):
         expected = {
             "A": {
                 "Name": "A",
@@ -71,7 +70,10 @@ class AggregateHurricaneDataTest(unittest.TestCase):
                                                                damages=["Damages not recorded", "0.5M"], deaths=[1, 2])
         self.assertEqual(actual, expected)
 
-    def test_should_aggregate_single_record_by_year(self):
+
+class HurricaneAggregationByYearTest(unittest.TestCase):
+
+    def test_should_aggregate_single_hurricane(self):
         hurricanes_by_name = {
             "A": {
                 "Name": "A",
@@ -98,7 +100,7 @@ class AggregateHurricaneDataTest(unittest.TestCase):
         }
         self.assertEqual(analyzer.aggregated_hurricane_records_by_year(hurricanes_by_name), expected)
 
-    def test_should_aggregate_many_records_by_year_on_single_year(self):
+    def test_should_aggregate_many_hurricanes_on_single_year(self):
         hurricanes_by_name = {
             "A": {
                 "Name": "A",
@@ -143,7 +145,7 @@ class AggregateHurricaneDataTest(unittest.TestCase):
         }
         self.assertEqual(analyzer.aggregated_hurricane_records_by_year(hurricanes_by_name), expected)
 
-    def test_should_aggregate_many_records_by_year_on_multiple_years(self):
+    def test_should_aggregate_many_hurricanes_on_multiple_years(self):
         hurricanes_by_name = {
             "A": {
                 "Name": "A",
@@ -209,7 +211,7 @@ class AggregateHurricaneDataTest(unittest.TestCase):
         self.assertEqual(analyzer.aggregated_hurricane_records_by_year(hurricanes_by_name), expected)
 
 
-class AffectedAreasTest(unittest.TestCase):
+class AffectedAreasAccountingTest(unittest.TestCase):
 
     def test_should_count_single_affected_area(self):
         hurricanes_by_name = {
@@ -273,25 +275,22 @@ class AffectedAreasTest(unittest.TestCase):
         }
         self.assertEqual(analyzer.total_areas_affected(hurricanes_by_name), expected)
 
-
-class AffectedAreasByMostHurricanesTest(unittest.TestCase):
-
-    def test_should_find_most_affected_area_by_hurricanes_when_there_is_only_a_single_affected_area(self):
+    def test_should_find_most_affected_area_on_single_area(self):
         affected_areas = {"Test1": 1}
         self.assertEqual(analyzer.most_affected_area(affected_areas), ("Test1", 1))
 
-    def test_should_find_most_affected_area_by_hurricanes_when_there_are_several_affected_areas_ordered(self):
+    def test_should_find_most_affected_area_on_several_ordered_by_occurrence(self):
         affected_areas = {"Test1": 10, "Test2": 9, "Test3": 1}
         self.assertEqual(analyzer.most_affected_area(affected_areas), ("Test1", 10))
 
-    def test_should_find_most_affected_area_by_hurricanes_when_there_are_several_affected_areas_unordered(self):
+    def test_should_find_most_affected_area_on_several_unordered_by_occurrence(self):
         affected_areas = {"Test1": 1, "Test2": 10, "Test3": 9}
         self.assertEqual(analyzer.most_affected_area(affected_areas), ("Test2", 10))
 
 
-class GreatestNumberOfDeathsTest(unittest.TestCase):
+class DeathsAccountingTest(unittest.TestCase):
 
-    def test_should_find_hurricane_with_greatest_deaths_when_there_is_only_a_single_hurricane(self):
+    def test_should_find_deadliest_hurricane_on_single_hurricane(self):
         hurricanes_by_name = {
             "A": {
                 "Name": "A",
@@ -305,7 +304,7 @@ class GreatestNumberOfDeathsTest(unittest.TestCase):
         }
         self.assertEqual(analyzer.most_deadly_hurricane(hurricanes_by_name), ("A", 1))
 
-    def test_should_find_hurricane_with_greatest_deaths_when_there_are_several_hurricanes_ordered_by_death(self):
+    def test_should_find_deadliest_hurricane_of_several_hurricanes_ordered_by_death(self):
         hurricanes_by_name = {
             "A": {
                 "Name": "A",
@@ -328,7 +327,7 @@ class GreatestNumberOfDeathsTest(unittest.TestCase):
         }
         self.assertEqual(analyzer.most_deadly_hurricane(hurricanes_by_name), ("A", 2))
 
-    def test_should_find_hurricane_with_greatest_deaths_when_there_are_several_hurricanes_unordered_by_death(self):
+    def test_should_find_deadliest_hurricane_of_several_hurricanes_unordered_by_death(self):
         hurricanes_by_name = {
             "A": {
                 "Name": "A",
